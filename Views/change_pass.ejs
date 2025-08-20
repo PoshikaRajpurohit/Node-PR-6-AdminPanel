@@ -19,11 +19,7 @@
   <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height:70vh;">
     <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; border-radius: 10px;">
       <h3 class="text-center mb-4">Change Password</h3>
-      <% if (typeof error !== "undefined") { %>
-        <div class="alert alert-danger text-center">
-          <%= error %>
-        </div>
-      <% } %>
+      
       <form action="/change-password" method="POST">
         <div class="mb-3">
           <label for="old_password" class="form-label">Old Password</label>
