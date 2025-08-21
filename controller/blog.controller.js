@@ -2,8 +2,6 @@ const Blog = require("../models/blog.model");
 const path = require("path");
 const fs = require("fs");
 const User = require("../models/UserModel");
-
-// ========================== Add Blog Page ==========================
 exports.addBlogPage = async (req, res) => {
   if (!req.cookies?.user?._id) return res.redirect("/");
 
@@ -14,11 +12,8 @@ exports.addBlogPage = async (req, res) => {
     return res.render("add_blog", { user });
   } catch (error) {
     console.error("Error fetching user:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== View All Blogs ==========================
 exports.viewAllBlogsPage = async (req, res) => {
   if (!req.cookies?.user?._id) return res.redirect("/");
 
@@ -51,11 +46,8 @@ exports.viewAllBlogsPage = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching blogs:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== My Blogs ==========================
 exports.MyBlogsPage = async (req, res) => {
   if (!req.cookies?.user?._id) return res.redirect("/user/login");
 
@@ -68,11 +60,8 @@ exports.MyBlogsPage = async (req, res) => {
     return res.render("my_blogs", { blogs, user });
   } catch (error) {
     console.error("Error fetching my blogs:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== Add New Blog ==========================
 exports.addNewBlog = async (req, res) => {
   try {
     if (!req.cookies?.user?._id) return res.redirect("/user/login");
@@ -88,17 +77,14 @@ exports.addNewBlog = async (req, res) => {
     await Blog.create({
       ...req.body,
       author,
-      userId: req.cookies.user._id, // link to logged in user
+      userId: req.cookies.user._id, 
     });
 
     return res.redirect("/blog/my-blogs");
   } catch (error) {
     console.error("Error adding blog:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== View Single Blog ==========================
 exports.viewSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
@@ -112,11 +98,8 @@ exports.viewSingleBlog = async (req, res) => {
     return res.render("single-blog", { blog, user });
   } catch (error) {
     console.error("Error fetching single blog:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== Edit Blog ==========================
 exports.editBlogPage = async (req, res) => {
   try {
     if (!req.cookies?.user?._id) return res.redirect("/");
@@ -134,24 +117,17 @@ exports.editBlogPage = async (req, res) => {
     return res.redirect("/blog/my-blogs");
   }
 };
-
-// ========================== Delete Blog ==========================
 exports.deleteBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (blog && blog.userId.toString() === req.cookies.user._id.toString()) {
       await Blog.findByIdAndDelete(req.params.id);
       return res.redirect("back");
-    } else {
-      return res.status(403).send("Unauthorized");
     }
   } catch (error) {
     console.error("Error deleting blog:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
-
-// ========================== Update Blog ==========================
 exports.updateBlog = async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);

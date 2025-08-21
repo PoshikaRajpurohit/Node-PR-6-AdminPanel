@@ -1,7 +1,4 @@
 const User = require("../models/UserModel")
-// const sendMail = require("../config/mailConfig");
-
-
 exports.logout = async (req, res) => {
     res.clearCookie("user");
     return res.redirect("/")
@@ -13,8 +10,6 @@ exports.loginPage = async (req, res) => {
         return res.render('login')
     }
 }
-
-
 exports.dashBoard = async (req, res) => {
     if (req.cookies && req.cookies.user && req.cookies.user._id) {
         return res.render("dashboard", { user: req.cookies.user });
@@ -22,8 +17,6 @@ exports.dashBoard = async (req, res) => {
         return res.redirect("/");
     }
 };
-
-
 exports.loginUser = async (req, res) => {
     try {
         console.log(req.body);
@@ -45,34 +38,32 @@ exports.loginUser = async (req, res) => {
         return res.redirect("/");
     }
 }
-
-
 exports.profilePage = async (req, res) => {
     try {
         console.log("🔍 Checking User Cookie:", req.cookies.user);
         if (!req.cookies.user) {
-            console.log("❌ No user cookie found. Redirecting to login...");
+            console.log(" No user cookie found. Redirecting to login...");
             return res.redirect("/");
         }
 
         let user = await User.findById(req.cookies.user);
         if (!user) {
-            console.log("❌ User not found in DB. Clearing cookie and redirecting...");
+            console.log(" User not found in DB. Clearing cookie and redirecting...");
             res.clearCookie("user");
             return res.redirect("/");
         }
 
-        console.log("✅ Found User:", user);
+        console.log(" Found User:", user);
 
         let imagePath = user.image && user.image.startsWith("/uploads/") 
             ? user.image 
             : "/uploads/default-profile.png";
 
-        console.log("🖼️ User Image Path:", imagePath);
+        console.log(" User Image Path:", imagePath);
 
         return res.render("profile", { user, imagePath });
     } catch (error) {
-        console.error("❌ Error in profilePage:", error);
+        console.error(" Error in profilePage:", error);
         return res.redirect("back");
     }
 };
@@ -130,9 +121,9 @@ exports.changePassword = async (req, res) => {
         return res.redirect("/");
 
     } catch (error) {
-        console.error("❌ Error in changePassword:", error);
+        console.error(" Error in changePassword:", error);
         return res.render("change_pass", { 
-            error: "❌ Something went wrong, please try again.",
+            error: " Something went wrong, please try again.",
             user: req.cookies.user || null
         });
     }

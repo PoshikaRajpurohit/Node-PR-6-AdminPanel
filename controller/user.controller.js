@@ -18,14 +18,12 @@ exports.addUserPage = async (req, res) => {
 exports.viewAllUserPage = async (req, res) => {
   try {
     let users = await User.find();
-
-    // get logged-in user from cookie
     const userCookie = req.cookies.user;
     const user = userCookie ? await User.findById(userCookie._id) : null;
 
     return res.render("view_all_user", { users, user });
   } catch (error) {
-    console.error("❌ Error loading users:", error);
+    console.error(" Error loading users:", error);
     return res.redirect("back");
   }
 };
@@ -43,7 +41,6 @@ exports.addNewUser = async (req, res) => {
     return res.redirect("/user/view-users");  
   } catch (error) {
     console.log(error);
-    return res.status(500).send("Error adding user");
   }
 };
 
@@ -51,7 +48,7 @@ exports.editUserPage = async (req, res) => {
   try {
     let user = await User.findById(req.params.id);
     if (user) {
-      return res.render("edit_user", { user }); // pass user details
+      return res.render("edit_user", { user });
     } else {
       return res.redirect("/user/view-users");
     }
@@ -69,7 +66,6 @@ exports.deleteUser = async (req, res) => {
     }
   } catch (error) {
     console.log("Error deleting user:", error);
-    return res.status(500).send("Internal Server Error");
   }
 };
 
